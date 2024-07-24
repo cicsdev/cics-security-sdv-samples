@@ -1,0 +1,27 @@
+name: Ansible
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  Lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "ansible-sdv-pipeline"
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.x
+      - name: Install Ansible-lint
+        run: |
+          python -m pip install --upgrade pip
+          pip install ansible-lint
+      - name: Running Ansible-lint
+        run: ansible-lint ./*

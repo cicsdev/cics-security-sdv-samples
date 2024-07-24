@@ -1,0 +1,45 @@
+@use '@carbon/react/scss/spacing' as *;
+@use '@carbon/react/scss/type' as *;
+@use '@carbon/react/scss/breakpoint' as *;
+@use '@carbon/react/scss/theme' as *;
+
+.concepts-tab-illo {
+  margin-top: 30px;
+  max-width: 80%;
+  min-width: 50%;
+  float: inline-end;
+  height: auto;
+}
+
+.concepts-tab-subheading {
+  @include type-style('productive-heading-03');
+
+  font-weight: 600;
+}
+
+.concepts-tab-p {
+  @include type-style('productive-heading-03');
+
+  margin-top: $spacing-06;
+  margin-bottom: $spacing-08;
+
+  @include breakpoint-between((320px + 1), md) {
+    max-width: 75%;
+  }
+}
+
+.concepts-numbered-list {
+  @include type-style('body-02');
+
+  margin-top: 20px;
+  margin-left: 40px;
+  list-style: decimal;
+}
+
+.concepts-numbered-list li {
+  margin-bottom: 20px;
+}
+
+.concepts-numbered-list ul li {
+  margin-bottom: 0;
+}

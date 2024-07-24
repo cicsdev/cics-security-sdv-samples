@@ -1,0 +1,75 @@
+{
+  "name": "sdv-approval-bot",
+  "version": "1.0.0",
+  "author": "Mark Lawrence <15652599+Mark-J-Lawrence@users.noreply.github.com>",
+  "license": "EPL-2.0",
+  "homepage": "https://github.com/cicsdev/cics-security-sdv-samples",
+  "scripts": {
+    "postinstall": "per-env",
+    "postinstall:development": "husky install",
+    "postinstall:staging": "",
+    "postinstall:production": "",
+    "clean": "rm -rf ./coverage",
+    "lint-bot": "eslint ./lib",
+    "lint-docs": "cd docs && npm run lint",
+    "lint-ansible": "ansible-lint ./ansible-sdv-pipeline/*",
+    "lint-flake8-python": "flake8 ./ansible-sdv-pipeline/",
+    "lint-pylint": "pylint ./ansible-sdv-pipeline --fail-under 5 --fail-on F,E,W,C,R",
+    "lint-all": "git config --global --add safe.directory /workspace/git-workspace; commitlint -V --from=HEAD~1 && npm run lint-bot && npm run lint-ansible && npm run lint-flake8-python && npm run lint-pylint && npm run lint-docs",
+    "pretest": "npm run clean && npm run lint-bot",
+    "start": "probot run ./lib/app.js",
+    "test": "jest --coverage",
+    "unit-test": "jest --coverage",
+    "pre-commit": "npm run lint-all"
+  },
+  "dependencies": {
+    "@octokit/rest": "20.0.2",
+    "express": "4.20.0",
+    "octokit-auth-probot": "2.0.0",
+    "per-env": "1.0.2",
+    "probot": "13.2.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "18.4.3",
+    "@commitlint/config-conventional": "18.4.3",
+    "@eslint/js": "^9.9.0",
+    "@types/jest": "29.5.11",
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb-base": "15.0.0",
+    "eslint-plugin-import": "2.29.0",
+    "eslint-plugin-jest": "27.6.0",
+    "eslint-plugin-react": "^7.35.0",
+    "globals": "^15.9.0",
+    "husky": "8.0.3",
+    "jest": "29.7.0",
+    "nock": "13.5.4",
+    "node-fetch": "2.7.0",
+    "pino": "8.17.0",
+    "typescript-eslint": "^8.1.0"
+  },
+  "engines": {
+    "node": ">= 18.17.0"
+  },
+  "jest": {
+    "verbose": true,
+    "testEnvironment": "node",
+    "setupFiles": [
+      "<rootDir>/.jest/setEnvVars.js"
+    ],
+    "collectCoverageFrom": [
+      "lib/**/*.js",
+      "!**/node_modules/**"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 85,
+        "functions": 98,
+        "lines": 89
+      }
+    },
+    "coverageReporters": [
+      "html",
+      "text"
+    ]
+  }
+}

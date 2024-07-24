@@ -1,0 +1,45 @@
+#
+# Copyright IBM Corp. 2024
+#
+
+# Try to get an existing check first, if exists, else create
+- name: Get GitHub check '{{ check_name }}'
+  ansible.builtin.uri:
+    url: "{{ scm_api_base_url }}/repos/{{ source_repo_owner | urlencode }}/{{ source_repo_name | urlencode }}/\
+          commits/{{ source_repo_commit_ref | urlencode }}/check-runs?check_name={{ check_name | urlencode }}"
+    method: GET
+    headers:
+      authorization: "Bearer {{ source_repo_approval_bot_token }}"
+  register: check_run_existing_info
+  ignore_errors: true
+  failed_when: check_run_existing_info.json.check_runs|length == 0
+
+- name: Set check_run_id as fact
+  ansible.builtin.set_fact:
+    check_run_id: "{{ check_run_existing_info.json.check_runs[0].id }}"
+  when: check_run_existing_info is succeeded
+
+- name: Create check
+  when: check_run_existing_info is failed
+  block:
+    - name: Create GitHub check '{{ check_name }}'
+      ansible.builtin.uri:
+        url: "{{ scm_api_base_url }}/repos/{{ source_repo_owner | urlencode }}/{{ source_repo_name | urlencode }}/check-runs"
+        method: POST
+        headers:
+          authorization: "Bearer {{ source_repo_approval_bot_token }}"
+          accept: application/vnd.github+json
+        status_code: [201]
+        body_format: json
+        body:
+          name: "{{ check_name | urlencode }}"
+          head_sha: "{{ source_repo_commit_ref | urlencode }}"
+          status: in_progress
+          output:
+            title: Starting Security checks...
+            summary: Starting Security checks...
+      register: new_check_run_info
+
+    - name: Set check_run_id as fact
+      ansible.builtin.set_fact:
+        check_run_id: "{{ new_check_run_info.json.id }}"

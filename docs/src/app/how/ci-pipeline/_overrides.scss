@@ -1,0 +1,22 @@
+.ci-pipeline-step-content .cds--tabs--scrollable {
+  transform: translateZ(0);
+  justify-content: flex-end;
+}
+
+
+.ci-pipeline-step-content .cds--tab-content {
+  margin-top: 0;
+  padding-bottom: 10px;
+}
+
+.ci-pipeline-step-content .cds--tab--list {
+  justify-content: flex-end;
+  padding-right: 0;
+  margin-top: 20px;
+}
+
+.ci-pipeline-step-content .cds--layer-two {
+  margin-top: 0;
+  padding-top: 20px;
+  padding-left: 10px;
+}

@@ -1,0 +1,59 @@
+@use '@carbon/react/scss/spacing' as *;
+@use '@carbon/react/scss/type' as *;
+@use '@carbon/react/scss/breakpoint' as *;
+@use '@carbon/react/scss/theme' as *;
+
+.approval-bot-step-container {
+  position: relative;
+  height: 100%;
+}
+
+.approval-bot-step-subheading {
+  @include type-style('productive-heading-03');
+
+  font-weight: 600;
+}
+
+.approval-bot-step-p {
+  @include type-style('body-02');
+
+  margin-top: $spacing-06;
+  margin-bottom: $spacing-06;
+
+  @include breakpoint-between((320px + 1), md) {
+    max-width: 75%;
+  }
+
+}
+
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.approval-bot-step-content {
+  animation: fade-in 1s;
+  margin-bottom: 48px;
+}
+
+.approval-bot-step-footer-buttons {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.approval-bot-step-manual-list {
+  @include type-style('body-02');
+
+  margin-top: 20px;
+  margin-left: 40px;
+  list-style: decimal;
+}
+
+.approval-bot-step-manual-list li {
+  margin-bottom: 20px;
+}
+
+.approval-bot-step-manual-list ul li {
+  margin-bottom: 0;
+}

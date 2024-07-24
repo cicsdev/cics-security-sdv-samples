@@ -1,0 +1,28 @@
+@use '@carbon/react/scss/spacing' as *;
+@use '@carbon/react/scss/type' as *;
+@use '@carbon/react/scss/breakpoint' as *;
+@use '@carbon/react/scss/theme' as *;
+
+.problem-tab-illo {
+  max-width: 80%;
+  min-width: 50%;
+  float: inline-end;
+  height: fit-content;
+}
+
+.problem-tab-subheading {
+  @include type-style('productive-heading-03');
+
+  font-weight: 600;
+}
+
+.problem-tab-p {
+  @include type-style('productive-heading-03');
+
+  margin-top: $spacing-06;
+  margin-bottom: $spacing-08;
+
+  @include breakpoint-between((320px + 1), md) {
+    max-width: 75%;
+  }
+}

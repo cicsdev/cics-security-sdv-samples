@@ -1,0 +1,69 @@
+{
+  "name": "cics-security-sdv-samples Container",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "vsintellicode.java.completionsEnabled": false,
+        "vsintellicode.python.completionsEnabled": false,
+        "vsintellicode.sql.completionsEnabled": false,
+        "vsintellicode.typescript.completionsEnabled": false,
+        "vsintellicode.modify.editor.suggestSelection": "disabled",
+        "errorLens.onSave": true,
+        "errorLens.messageEnabled": true,
+        "versionlens.suggestions.showOnStartup": true,
+        "editor.formatOnSave": true,
+        "ansible.python.interpreterPath": "/usr/local/python/current/bin/python",
+        "pylint.interpreter": [
+          "/usr/local/python/current/bin/python"
+        ],
+        "eslint.workingDirectories": [
+          "./docs",
+          "./lib"
+        ],
+        "stylelint.validate": [
+          "css",
+          "scss"
+        ],
+        "stylelint.configBasedir": "./docs"
+      },
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "usernamehw.errorlens",
+        "igorsbitnev.error-gutters",
+        "wayou.vscode-todo-highlight",
+        "pflannery.vscode-versionlens",
+        "bierner.markdown-emoji",
+        "redhat.ansible",
+        "ms-python.flake8",
+        "gruntfuggly.todo-tree",
+        "ms-python.python",
+        "ms-python.pylint",
+        "stylelint.vscode-stylelint",
+        "streetsidesoftware.code-spell-checker"
+      ]
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/common-utils:2": {},
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18"
+    },
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.12"
+    }
+  },
+  "forwardPorts": [
+    3000,
+    3001
+  ],
+  "privileged": true,
+  "remoteUser": "root",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces,type=bind",
+  "workspaceFolder": "/workspaces",
+  "postStartCommand": "git config --global --add safe.directory /workspaces; git config commit.gpgsign false",
+  "postAttachCommand": "/post_script/initialise_dev_container.sh"
+}

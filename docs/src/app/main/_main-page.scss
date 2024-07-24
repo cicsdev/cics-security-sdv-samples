@@ -1,0 +1,135 @@
+@use '@carbon/react/scss/spacing' as *;
+@use '@carbon/react/scss/type' as *;
+@use '@carbon/react/scss/breakpoint' as *;
+@use '@carbon/react/scss/theme' as *;
+@use './mixins.scss' as *;
+@use './overrides.scss';
+
+html {
+  background-color: $layer-01;
+}
+
+.main-page {
+  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin-top: 48px;
+}
+
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.main-page-illo {
+  max-width: 100%;
+  float: inline-end;
+  height: auto;
+}
+
+.main-page-banner {
+  padding-top: $spacing-05;
+  padding-bottom: $spacing-08 * 2;
+  padding-left: $spacing-06;
+
+  @include main-page-background;
+}
+
+.main-page-heading {
+  @include type-style('productive-heading-05');
+}
+
+.main-page-content {
+  margin-top: -40px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  scroll-behavior: smooth;
+}
+
+.main-page-subheading {
+  @include type-style('productive-heading-03');
+
+  font-weight: 600;
+}
+
+.main-page-p {
+  @include type-style('productive-heading-03');
+
+  margin-top: $spacing-06;
+  margin-bottom: $spacing-08;
+
+  @include breakpoint-between((320px + 1), md) {
+    max-width: 75%;
+  }
+}
+
+.tabs-group {
+  background-color: $layer-01;
+  padding: 0 $spacing-03;
+  position: fixed;
+  z-index: 69;
+
+}
+
+
+.tabs-group-content {
+  padding: $spacing-07 0 $spacing-10 $spacing-06;
+  margin-top: 10px;
+  animation: fade-in 1s;
+}
+
+.main-page-footer {
+  padding-top: $spacing-08;
+  padding-bottom: calc($spacing-08);
+  padding-left: $spacing-06;
+  margin-left: -20px;
+  margin-right: 0;
+  margin-bottom: 40px;
+
+  @include main-page-background;
+}
+
+.main-page-label {
+  @include type-style('heading-01');
+
+  @include breakpoint-down(md) {
+    padding-bottom: 1.5rem;
+  }
+}
+
+.main-page-title {
+  padding-bottom: 0.5rem;
+}
+
+.main-page-banner,
+.main-page-content {
+  margin-left: -20px;
+  margin-right: -20px;
+
+  @include breakpoint-down(md) {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+@media (width <= 672px) {
+  .main-page-illo {
+    width: 528px;
+    width: 100%;
+    height: auto;
+    float: inline-start;
+  }
+}
+
+@media (width <= 320px) {
+  .main-page-illo {
+    display: none;
+  }
+
+  .main-page-banner {
+    padding-bottom: $spacing-05 * 4;
+  }
+}

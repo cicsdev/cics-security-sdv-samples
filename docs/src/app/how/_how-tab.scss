@@ -1,0 +1,25 @@
+@use '@carbon/react/scss/spacing' as *;
+@use '@carbon/react/scss/type' as *;
+@use '@carbon/react/scss/breakpoint' as *;
+@use '@carbon/react/scss/theme' as *;
+@use './intro/intro-step';
+@use './approval-bot/approval-bot-step';
+@use './ci-pipeline/ci-pipeline-step';
+@use './galasa-architecture/galasa-architecture-step';
+@use './galasa-tests/galasa-tests-step';
+@use './preparation/preparation-step';
+@use './repo-config/repo-config-step';
+@use './sdc-configuration/sdc-config-step';
+@use './zos-configuration/zos-config-step';
+
+
+.how-tab-p {
+  @include type-style('productive-heading-03');
+
+  margin-top: $spacing-06;
+  margin-bottom: $spacing-06;
+
+  @include breakpoint-between((320px + 1), md) {
+    max-width: 75%;
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "sdv-documentation",
+  "version": "1.0.0",
+  "homepage": "https://cicsdev.github.io/cics-security-sdv-samples",
+  "scripts": {
+    "dev": "next dev",
+    "build": "NODE_ENV=production next build",
+    "start": "next start",
+    "lint": "next lint ./src && stylelint '**/*.{scss,css}'"
+  },
+  "dependencies": {
+    "@carbon/icons-react": "11.48.0",
+    "@carbon/pictograms-react": "11.65.0",
+    "@carbon/react": "1.65.0",
+    "next": "14.2.9",
+    "prop-types": "15.8.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "sass": "1.78.0"
+  },
+  "devDependencies": {
+    "eslint": "8.57.0",
+    "eslint-config-airbnb": "19.0.4",
+    "eslint-config-next": "14.2.5",
+    "stylelint": "16.8.1",
+    "stylelint-config-sass-guidelines": "12.0.0",
+    "stylelint-config-standard": "36.0.1"
+  }
+}

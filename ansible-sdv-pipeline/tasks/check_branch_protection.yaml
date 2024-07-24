@@ -1,0 +1,27 @@
+#
+# Copyright IBM Corp. 2024
+#
+
+- name: Obtain branch information for branch {{ target_branch }}
+  ansible.builtin.uri:
+    url: "{{ scm_api_base_url }}/repos/{{ source_repo_owner | urlencode }}/{{ source_repo_name | urlencode }}\
+          /branches/{{ target_branch | urlencode }}"
+    method: GET
+    headers:
+      authorization: "Bearer {{ source_repo_approval_bot_token }}"
+  register: branch_info_result
+
+- name: Handle if check not required on branch {{ target_branch }}
+  when: branch_info_result.json.protection.required_status_checks | json_query(branch_protect_json_query) | length == 0
+  vars:
+    branch_protect_json_query: 'checks[?context == `{{ check_name }}`]'
+  block:
+    - name: "Update check to skipped: {{ check_name }}"
+      ansible.builtin.include_tasks: ../tasks/update_gh_check.yaml
+      vars:
+        check_conclusion: skipped
+        check_title: "{{ check_name }} not required on {{ target_branch }} branch"
+        check_summary: "'{{ check_name }}' is not set as required in the '{{ target_branch }}' branch protection settings. Skipping process."
+
+    - name: End playbook
+      ansible.builtin.meta: end_play

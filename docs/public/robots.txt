@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://cicsdev.github.io/cics-security-sdv-samples
+
+# Sitemaps
+Sitemap: https://cicsdev.github.io/cics-security-sdv-samples/sitemap.xml

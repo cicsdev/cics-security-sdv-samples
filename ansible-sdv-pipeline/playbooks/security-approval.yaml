@@ -1,0 +1,242 @@
+#
+# Copyright IBM Corp. 2024
+#
+
+- name: Security definition validation
+  hosts: localhost
+  gather_facts: false
+
+  vars_prompt:
+    - name: test_report_path
+      prompt: "Please enter the path of the Galasa test report Json"
+      private: false
+    - name: check_name
+      prompt: "Please enter the name of the PR check for this process"
+      private: false
+      default: "Security"
+    - name: source_repo_approval_bot_token_path
+      prompt: "Please enter the path of the file containing the token for the Approval Bot access on the source repo"
+      private: false
+    - name: scm_api_base_url
+      prompt: "Please enter the base URL for the scm's API"
+      private: false
+    - name: source_repo_owner
+      prompt: "Please enter the owner/org of the source repo of the change"
+      private: false
+    - name: source_repo_name
+      prompt: "Please enter the name of the source repo of the change"
+      private: false
+    - name: source_repo_branch
+      prompt: "Please enter the name of the branch on the source repo of the change"
+      private: false
+    - name: source_repo_commit_ref
+      prompt: "Please enter the commit sha"
+      private: false
+    - name: source_repo_pull_number
+      prompt: "Please enter the pull request number on the source repo of the change"
+      default: ""
+      private: false
+    - name: galasa_ecosystem_url
+      prompt: "Please enter the Galasa ecosystem URL"
+      private: false
+    - name: galasa_token_path
+      prompt: "Please enter the path of the file containing the token for Galasa"
+      private: false
+    - name: github_app_author_name_path
+      prompt: "Please enter path to the file containing the author name of the GitHub app that will commit to the security repo."
+      private: false
+    - name: github_app_author_email_path
+      prompt: "Please enter path to the file containing the email of the GitHub app that will commit to the security repo."
+      private: false
+    - name: security_repo_owner
+      prompt: "Please enter the owner of the security repo."
+      private: false
+    - name: security_repo_name
+      prompt: "Please enter the name of the security repo."
+      private: false
+    - name: target_branch
+      prompt: "Please enter the name of the branch both the source and the security repo will merge to."
+      private: false
+    - name: security_repo_approval_bot_token_path
+      prompt: "Please enter the path of the file containing the token for the security repo"
+      private: false
+    - name: security_repo_url
+      prompt: "Please enter the URL of the security repo"
+
+  vars:
+    test_results: "{{ lookup('file','{{ test_report_path }}') | from_json }}"
+    security_repo_new_branch: "{{ source_repo_owner }}/{{ source_repo_name }}/{{ source_repo_branch }}"
+    github_app_author_name: "{{ lookup('file','{{ github_app_author_name_path }}') }}"
+    github_app_author_email: "{{ lookup('file','{{ github_app_author_email_path }}') }}"
+    source_repo_approval_bot_token: "{{ lookup('file', '{{ source_repo_approval_bot_token_path }}') }}"
+    security_repo_approval_bot_token: "{{ lookup('file', '{{ security_repo_approval_bot_token_path }}') }}"
+    galasa_token: "{{ lookup('file', '{{ galasa_token_path }}') }}"
+
+  tasks:
+
+# ------------- Initialisation -------------
+
+    - name: Create GH Check
+      ansible.builtin.include_tasks: ../tasks/create_gh_check.yaml
+
+# ---------- Check we should run SDV -------
+    - name: Only run security if check set as required on branch protection for target branch
+      ansible.builtin.include_tasks: ../tasks/check_branch_protection.yaml
+
+    - name: If not all tests passed, gracefully end and update check
+      block:
+        - name: Check all tests passed
+          ansible.builtin.fail:
+            msg: Not all tests passed. Will not conduct SDV.
+          when: "test_results.tests | length != test_results | json_query('tests[?result == `Passed`]') | length"
+      rescue:
+        - name: Update GH Check
+          ansible.builtin.include_tasks: ../tasks/update_gh_check.yaml
+          vars:
+            check_conclusion: cancelled
+            check_title: "Failed: {{ ansible_failed_task.name }}"
+            check_summary: "{{ ansible_failed_result.msg }}"
+
+        - name: "{{ ansible_failed_task.name }}"
+          ansible.builtin.fail:
+            msg: "{{ ansible_failed_result.msg }}"
+
+# ------- Run SDV --------------------
+    - name: Attempt SDV, if anything fails, update check
+      block:
+        - name: Update GH Check
+          ansible.builtin.include_tasks: ../tasks/update_gh_check.yaml
+          vars:
+            check_status: in_progress
+            check_title: Cloning Security repo
+            check_summary: Cloning Security repo
+
+        - name: Create a temporary directory for processing
+          ansible.builtin.tempfile:
+            path: "/tmp"
+            state: directory
+            prefix: "ibm_security_verification."
+          register: temp_dir
+
+        - name: Set temp dir fact
+          ansible.builtin.set_fact:
+            security_repo_path: "{{ temp_dir.path }}/security"
+
+        - name: Clone the Security metadata repository
+          ansible.builtin.git:
+            repo: https://x-access-token:{{ security_repo_approval_bot_token }}@{{ security_repo_url }}
+            dest: "{{ security_repo_path }}"
+            single_branch: true
+            version: "{{ target_branch }}"
+
+        - name: Delete any existing branch in security repo
+          ansible.builtin.command:
+            cmd: "git branch -D {{ security_repo_new_branch }}"
+            chdir: "{{ security_repo_path }}"
+          ignore_errors: true
+          register: existing_branch_error
+          changed_when: existing_branch_error.rc == 0
+
+        - name: Create new branch in security repo linking to source repository & source branch # noqa: command-instead-of-module
+          ansible.builtin.command:
+            cmd: "git checkout -b {{ security_repo_new_branch }}"
+            chdir: "{{ security_repo_path }}"
+          register: branch_response
+          changed_when: "'Switched to a new branch' in branch_response.stdout"
+
+        - name: Delete the automated directory in security repo, if this is a default branch run
+          ansible.builtin.file:
+            path: "{{ security_repo_path }}/automated"
+            state: absent
+          when: source_repo_branch == target_branch
+
+        - name: Create automated directory in security repo, if it doesn't exist
+          ansible.builtin.file:
+            path: "{{ security_repo_path }}/automated"
+            state: directory
+            mode: "0777"
+
+# ------------ Grabbing data ------------
+
+        - name: Update GH Check
+          ansible.builtin.include_tasks: ../tasks/update_gh_check.yaml
+          vars:
+            check_status: in_progress
+            check_title: Fetching test metadata
+            check_summary: Fetching test metadata
+
+        - name: Grab security metadata from Galasa test run and place into security repo
+          fetch_galasa_security_data:
+            test_report_path: "{{ test_report_path }}"
+            galasa_ecosystem_url: "{{ galasa_ecosystem_url }}"
+            metadata_folder: "{{ security_repo_path }}/automated"
+          environment:
+            GALASA_TOKEN: "{{ galasa_token }}"
+          register: metadata_fetch_result
+
+# ----------- Process new data -----------
+
+        - name: Update GH Check
+          ansible.builtin.include_tasks: ../tasks/update_gh_check.yaml
+          vars:
+            check_status: in_progress
+            check_title: Processing new metadata
+            check_summary: Processing new metadata
+
+        - name: Stage metadata file changes # noqa: command-instead-of-module
+          ansible.builtin.command:
+            cmd: "git add ."
+            chdir: "{{ security_repo_path }}"
+          register: git_add_result
+          changed_when: git_add_result.rc == 0
+
+        - name: Check for changes in security metadata # noqa: command-instead-of-module
+          ansible.builtin.command:
+            cmd: "git diff --cached --exit-code  --ignore-space-at-eol -b -w --ignore-blank-lines -G. -U4"
+            chdir: "{{ security_repo_path }}"
+          ignore_errors: true
+          register: git_diff_result
+          changed_when: git_diff_result.rc > 0
+
+# ----------- Approve source check & end, if no changes -----------
+        - name: Update GH Check
+          ansible.builtin.include_tasks: ../tasks/update_gh_check.yaml
+          vars:
+            check_conclusion: success
+            check_title: Security approved
+            check_summary: No security changes were found.
+          when: git_diff_result.rc == 0
+
+        - name: End run, no security changes found.
+          ansible.builtin.meta: end_play
+          when: git_diff_result.rc == 0
+
+# ----------- Security changes found, raise PR -----------
+
+        - name: Update GH Check
+          ansible.builtin.include_tasks: ../tasks/update_gh_check.yaml
+          vars:
+            check_status: in_progress
+            check_title: Deltas found, creating approval...
+            check_summary: Deltas found, creating approval...
+          when: git_diff_result.rc > 0
+
+        - name: Create Pull Request
+          ansible.builtin.include_tasks: ../tasks/create_pull_request.yaml
+          when: git_diff_result.rc > 0
+
+      rescue:
+        - name: Update GH Check
+          ansible.builtin.include_tasks: ../tasks/update_gh_check.yaml
+          vars:
+            check_conclusion: failure
+            check_title: "Failed: {{ ansible_failed_task.name }}"
+            check_summary: "{{ (ansible_failed_result | default({})).msg | default('') }} \
+                            {{ (ansible_failed_result | default({})).stderr | default('') }} \
+                            {{ (ansible_failed_result | default({})).stdout | default('') }}"
+
+        - name: "{{ ansible_failed_task.name }}"
+          ansible.builtin.fail:
+            msg: "{{ (ansible_failed_result | default({})).msg | default('') }} \
+                  {{ (ansible_failed_result | default({})).stderr | default('') }} \
+                  {{ (ansible_failed_result | default({})).stdout | default('') }}"

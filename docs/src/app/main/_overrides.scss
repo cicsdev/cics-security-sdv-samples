@@ -1,0 +1,28 @@
+.main-page-content .cds--tabs--scrollable {
+  transform: translateZ(0);
+  justify-content: flex-end;
+}
+
+.cds--tab-content {
+  flex-grow: 1;
+}
+
+.main-page-content .cds--tab-content {
+  padding: 0;
+  margin-top: 40px;
+}
+
+.cds--tab--list {
+  justify-content: flex-end;
+  padding-right: 1rem;
+}
+
+.cds--subgrid--wide {
+  //fix needed to keep the subgrid from scrolling horizontally
+  margin-right: 1rem;
+}
+
+.cds--btn-set {
+  width: 90%;
+  justify-content: space-between;
+}

@@ -1,0 +1,31 @@
+#
+# Copyright IBM Corp. 2024
+#
+
+- name: Update Check Run to {{ check_title }}
+  ansible.builtin.uri:
+    url: "{{ scm_api_base_url }}/repos/{{ source_repo_owner | urlencode }}/{{ source_repo_name | urlencode }}/check-runs/{{ check_run_id | urlencode }}"
+    method: PATCH
+    headers:
+      authorization: "Bearer {{ source_repo_approval_bot_token }}"
+    body_format: json
+    body:
+      status: "{{ check_status }}"
+      output:
+        title: "{{ check_title }}"
+        summary: "{{ check_summary }}"
+  when: check_status is defined
+
+- name: Update Check Run to {{ check_title }}
+  ansible.builtin.uri:
+    url: "{{ scm_api_base_url }}/repos/{{ source_repo_owner | urlencode }}/{{ source_repo_name | urlencode }}/check-runs/{{ check_run_id | urlencode }}"
+    method: PATCH
+    headers:
+      authorization: "Bearer {{ source_repo_approval_bot_token }}"
+    body_format: json
+    body:
+      conclusion: "{{ check_conclusion }}"
+      output:
+        title: "{{ check_title }}"
+        summary: "{{ check_summary }}"
+  when: check_conclusion is defined

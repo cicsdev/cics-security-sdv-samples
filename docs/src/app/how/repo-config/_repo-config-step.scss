@@ -1,0 +1,87 @@
+@use '@carbon/react/scss/spacing' as *;
+@use '@carbon/react/scss/type' as *;
+@use '@carbon/react/scss/breakpoint' as *;
+@use '@carbon/react/scss/theme' as *;
+
+.repo-config-step-container {
+  position: relative;
+  height: 100%;
+}
+
+.repo-config-step-subheading {
+  @include type-style('productive-heading-03');
+
+  font-weight: 600;
+}
+
+.repo-config-step-subheading-inner {
+  @include type-style('productive-heading-02');
+
+  font-weight: 600;
+}
+
+.repo-config-step-p {
+  @include type-style('body-02');
+
+  margin-top: $spacing-06;
+  margin-bottom: $spacing-06;
+
+  @include breakpoint-between((320px + 1), md) {
+    max-width: 75%;
+  }
+
+}
+
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.repo-config-step-content {
+  animation: fade-in 1s;
+  margin-bottom: 48px;
+}
+
+.repo-config-step-footer-buttons {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.repo-config-step-manual-list {
+  @include type-style('body-02');
+
+  margin-top: 20px;
+  margin-left: 40px;
+  list-style: decimal;
+}
+
+.repo-config-step-manual-bullet {
+  @include type-style('body-02');
+
+  margin-top: 20px;
+  margin-left: 40px;
+  list-style: outside;
+}
+
+.repo-config-step-image {
+  width: 450px;
+  float: inline-end;
+  height: fit-content;
+}
+
+.repo-config-step-manual-bullet li {
+  margin-bottom: 20px;
+}
+
+.repo-config-step-manual-list li {
+  margin-bottom: 20px;
+}
+
+.repo-config-step-manual-list ul li {
+  margin-bottom: 0;
+}
+
+.repo-config-step-manual-bullet ul li {
+  margin-bottom: 0;
+}

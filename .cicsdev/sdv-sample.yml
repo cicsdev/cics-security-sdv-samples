@@ -1,0 +1,21 @@
+name: cics-security-sdv-samples
+description: "Provides tooling to introduce Security testing into your CICS applications CI pipelines"
+learning_objective: |
+  Learn how to use the Galasa SDV manager to write role-based tests for your CICS applications, then how to adapt 
+  the applications CI pipeline to detect changes in security definition usage following application code change 
+  requests and initiate an approval process.
+product:
+  cicsts:
+    version:
+      minimum: 6.2
+    language: javascript,python,ansible
+
+build:
+  ide:
+    - VS Code
+  tools:
+    - Node
+    - Python
+    - Ansible
+    - GitHub
+    - Galasa

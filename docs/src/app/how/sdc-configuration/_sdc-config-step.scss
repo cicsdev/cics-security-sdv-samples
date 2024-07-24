@@ -1,0 +1,59 @@
+@use '@carbon/react/scss/spacing' as *;
+@use '@carbon/react/scss/type' as *;
+@use '@carbon/react/scss/breakpoint' as *;
+@use '@carbon/react/scss/theme' as *;
+
+.sdc-config-step-container {
+  position: relative;
+  height: 100%;
+}
+
+.sdc-config-step-subheading {
+  @include type-style('productive-heading-03');
+
+  font-weight: 600;
+}
+
+.sdc-config-step-p {
+  @include type-style('body-02');
+
+  margin-top: $spacing-06;
+  margin-bottom: $spacing-06;
+
+  @include breakpoint-between((320px + 1), md) {
+    max-width: 75%;
+  }
+
+}
+
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.sdc-config-step-content {
+  animation: fade-in 1s;
+  margin-bottom: 52px;
+}
+
+.sdc-config-step-footer-buttons {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.sdc-config-step-manual-list {
+  @include type-style('body-02');
+
+  margin-top: 20px;
+  margin-left: 40px;
+  list-style: decimal;
+}
+
+.sdc-config-step-manual-list li {
+  margin-bottom: 20px;
+}
+
+.sdc-config-step-manual-list ul li {
+  margin-bottom: 0;
+}

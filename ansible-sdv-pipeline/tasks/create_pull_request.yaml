@@ -1,0 +1,115 @@
+#
+# Copyright IBM Corp. 2024
+#
+
+- name: Check we have a git author set up # noqa: command-instead-of-module
+  ansible.builtin.command:
+    cmd: git config user.name
+  register: git_username
+  ignore_errors: true
+  changed_when: git_username.rc == 0
+
+- name: Add Github App details as author
+  when: git_username.stdout == ""
+  block:
+    - name: Set user name # noqa: command-instead-of-module
+      ansible.builtin.command:
+        cmd: git config --global user.name "{{ github_app_author_name }}"
+      register: username_set
+      changed_when: username_set.rc == 0
+
+    - name: Set user email # noqa: command-instead-of-module
+      ansible.builtin.command:
+        cmd: git config --global user.email {{ github_app_author_email }}
+      register: email_set
+      changed_when: email_set.rc == 0
+
+- name: Create commit with PR link # noqa: command-instead-of-module
+  ansible.builtin.command:
+    cmd: "git commit -m 'update to security from {{ source_repo_owner }}/{{ source_repo_name }}#{{ source_repo_pull_number }}'"
+    chdir: "{{ security_repo_path }}"
+  when: source_repo_pull_number != ""
+  register: commit_result
+  changed_when: commit_result.rc == 0
+
+- name: Create commit for default branch # noqa: command-instead-of-module
+  ansible.builtin.command:
+    cmd: "git commit -m 'update to security on {{ source_repo_owner }}/{{ source_repo_name }} default branch'"
+    chdir: "{{ security_repo_path }}"
+  when: source_repo_pull_number == ""
+  register: commit_result
+  changed_when: commit_result.rc == 0
+
+- name: Update GH Check
+  ansible.builtin.include_tasks: ../tasks/update_gh_check.yaml
+  vars:
+    check_status: in_progress
+    check_title: Creating PR on security repo
+    check_summary: Creating PR on security repo
+
+- name: Push branch # noqa: command-instead-of-module
+  ansible.builtin.command:
+    cmd: "git push --set-upstream origin {{ security_repo_new_branch }} --force"
+    chdir: "{{ security_repo_path }}"
+  register: push_result
+  changed_when: push_result.rc == 0
+
+- name: See if Pull Request already exists
+  ansible.builtin.uri:
+    url: "{{ scm_api_base_url }}/repos/{{ security_repo_owner | urlencode }}/{{ security_repo_name | urlencode }}\
+          /pulls?state=open&base={{ target_branch | urlencode }}&head={{ security_repo_owner | urlencode }}:{{ security_repo_new_branch | urlencode }}"
+    method: GET
+    headers:
+      authorization: "Bearer {{ security_repo_approval_bot_token }}"
+    status_code: [200]
+    body_format: json
+  register: existing_pull_request_info
+
+- name: Create Pull Request
+  ansible.builtin.uri:
+    url: "{{ scm_api_base_url }}/repos/{{ security_repo_owner | urlencode }}/{{ security_repo_name | urlencode }}/pulls"
+    method: POST
+    headers:
+      authorization: "Bearer {{ security_repo_approval_bot_token }}"
+    body_format: json
+    body:
+      title: Security changes in {{ source_repo_owner }}/{{ source_repo_name }}
+      body: |
+        Changes to code have been proven to cause changes in security usage.
+        Please review the security changes in this pull request and either Approve or REJECT.
+
+        Source Org: {{ source_repo_owner }}
+        Source Repo: {{ source_repo_name }}
+        Pull Request: {{ source_repo_owner + '/' + source_repo_name + '#' + source_repo_pull_number
+          if source_repo_pull_number != '' else ' N/A - Changes found on default/release branch' }}
+        Author: {{ '@' + source_repo_pull_author if source_repo_pull_number != '' else ' N/A - Changes found on default/release branch' }}
+      head: "{{ security_repo_new_branch }}"
+      base: "{{ target_branch }}"
+    status_code: [201]
+  register: new_pull_request_info
+  when: existing_pull_request_info.json | length == 0
+
+- name: Rejig variable
+  ansible.builtin.set_fact:
+    pull_request_info: "{{ existing_pull_request_info.json[-1] }}"
+  when: existing_pull_request_info.json | length > 0
+
+- name: Rejig variable
+  ansible.builtin.set_fact:
+    pull_request_info: "{{ new_pull_request_info.json }}"
+  when: new_pull_request_info.json is defined
+
+- name: Print the gateway for each host when defined
+  ansible.builtin.debug:
+    msg: System {{ inventory_hostname }} has gateway {{ ansible_default_ipv4.gateway }}
+  when: ansible_default_ipv4.gateway is defined
+
+- name: Update GH Check
+  ansible.builtin.include_tasks: ../tasks/update_gh_check.yaml
+  vars:
+    check_status: in_progress
+    check_title: Awaiting full approval of security PR
+    check_summary: |
+      The changes in this PR will result in a change of security usage.
+
+      The security changes found are currently awaiting Security approval [here]({{ pull_request_info.html_url }}).

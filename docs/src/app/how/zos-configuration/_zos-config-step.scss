@@ -1,0 +1,43 @@
+@use '@carbon/react/scss/spacing' as *;
+@use '@carbon/react/scss/type' as *;
+@use '@carbon/react/scss/breakpoint' as *;
+@use '@carbon/react/scss/theme' as *;
+
+.zos-config-step-container {
+  position: relative;
+  height: 100%;
+}
+
+.zos-config-step-subheading {
+  @include type-style('productive-heading-03');
+
+  font-weight: 600;
+}
+
+.zos-config-step-p {
+  @include type-style('body-02');
+
+  margin-top: $spacing-06;
+  margin-bottom: $spacing-06;
+
+  @include breakpoint-between((320px + 1), md) {
+    max-width: 75%;
+  }
+
+}
+
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.zos-config-step-content {
+  animation: fade-in 1s;
+  margin-bottom: 48px;
+}
+
+.zos-config-step-footer-buttons {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}

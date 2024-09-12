@@ -8,6 +8,9 @@
     "start": "next start",
     "lint": "next lint ./src && stylelint '**/*.{scss,css}'"
   },
+  "engines": {
+    "node": ">= 18.17.0"
+  },
   "dependencies": {
     "@carbon/icons-react": "11.48.0",
     "@carbon/pictograms-react": "11.65.0",

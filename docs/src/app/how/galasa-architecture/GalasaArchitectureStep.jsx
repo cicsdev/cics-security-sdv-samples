@@ -63,7 +63,7 @@ export default function GalasaArchitectureStep({
           tests are finished running.
           <br />
           <br />
-          This option works well if there is a small number of tests with no requirement to run test in parallel.
+          This option works well if there are a small number of tests with no requirement to run test in parallel.
         </p>
 
         <h3 className='galasa-architecture-step-subheading-inner'>Ecosystem using DSE</h3>

@@ -2371,7 +2371,7 @@ wk '{gsub(/\\./,"-"); print}'\`
             </li>
 
             <li>
-              If running in an Galasa Ecosystem, build a list of tests to run by&nbsp;
+              If running in a Galasa Ecosystem, build a list of tests to run by&nbsp;
               <a
                 href='https://galasa.dev/docs/cli-command-reference/ecosystem-cli-runs-prepare'
                 target='_blank'

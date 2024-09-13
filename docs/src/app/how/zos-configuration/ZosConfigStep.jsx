@@ -78,8 +78,8 @@ export default function ZosConfigurationStep({
           as this will increase the number of tests that can be ran in parallel.
           <br />
           This is because a user must only be used for one test at a time, to eliminate the risk of capturing
-          &quot;Security noise&quot;, which would be the capturing of security being used by another test using
-          the same user at the same time.
+          &quot;Security noise&quot;, which would be the capturing of security requests from another test
+          using the same user at the same time.
           <br />
           The number of users in the pool should be relative to the amount of tests using the role.
         </p>

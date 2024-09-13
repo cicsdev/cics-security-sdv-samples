@@ -36,7 +36,7 @@ export default function ProblemTab({
             SDV automates and improves the efficiency of identifying required changes to security when changes are
             made to
             CICS applications. This is currently a slow, error prone, and manual process, often leading to
-            application breakages when the application is first ran in an environment with security switched on, which
+            application breakages when the application is first run in an environment with security switched on, which
             is more common than not, pre-production!
           </p>
           <br />

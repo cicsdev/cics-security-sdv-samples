@@ -29,7 +29,7 @@ export default function ApprovalBotStep({
           of the SDV workflow.
           <br />
           <br />
-          At this point, there are two open changes requests, one for the app or test code, and one for the
+          At this point, there are two open change requests, one for the app or test code, and one for the
           security baseline, and from the perspective of the SCM tool there is no direct relation between them.
           Additionally, SCM tools currently do not provide the ability for actions in a change request to directly
           affect the status of another change request in a completely different repository.

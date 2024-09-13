@@ -50,7 +50,7 @@ turing-validating-security-definitions-during-development-process'}
           <p>
             An SDV pipeline does all the same tasks as any existing CI/CD pipeline, however,
             if an application code change request results in a change to the security definitions
-            required for that application to run an
+            required for that application to run, an
             <strong> approval process </strong>
             is initiated, which&nbsp;
             <strong>must be approved by a Security Admin</strong>

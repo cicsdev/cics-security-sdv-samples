@@ -43,7 +43,7 @@ export default function ProblemTab({
           <p>
             SDV helps contribute towards larger
             <strong> Zero Trust </strong>
-            or
+            and
             <strong> DevSecOps </strong>
             strategies by introducing
             <strong> security testing </strong>

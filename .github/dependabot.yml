@@ -1,0 +1,11 @@
+version: 2
+updates:
+  - package-ecosystem: "npm" # See documentation for possible values
+    directories:
+      - "/"
+      - "/docs"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 0 # only create PRs for security updates
+    reviewers:
+      - "Mark-j-Lawrence"

@@ -23,7 +23,7 @@
     "pre-commit": "npm run lint-all"
   },
   "dependencies": {
-    "@octokit/rest": "20.0.2",
+    "@octokit/rest": "21.0.2",
     "express": "4.21.0",
     "octokit-auth-probot": "2.0.0",
     "per-env": "1.0.2",

@@ -7,5 +7,3 @@ updates:
     schedule:
       interval: "daily"
     open-pull-requests-limit: 0 # only create PRs for security updates
-    reviewers:
-      - "Mark-j-Lawrence"

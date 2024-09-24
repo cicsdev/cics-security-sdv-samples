@@ -1,10 +1,6 @@
 # cics-security-sdv-samples
 
-[![SDV Approval Bot Build](https://github.com/cicsdev/cics-security-sdv-samples/actions/workflows/node.js.yml/badge.svg)](https://github.com/cicsdev/cics-security-sdv-samples/actions/workflows/node.js.yml)
-[![SDV Documentation](https://github.com/cicsdev/cics-security-sdv-samples/actions/workflows/docs.yml/badge.svg)](https://github.com/cicsdev/cics-security-sdv-samples/actions/workflows/docs.yml)
-[![Ansible Lint](https://github.com/cicsdev/cics-security-sdv-samples/actions/workflows/ansible-lint.yml/badge.svg)](https://github.com/cicsdev/cics-security-sdv-samples/actions/workflows/ansible-lint.yml)
-[![Python Lint](https://github.com/cicsdev/cics-security-sdv-samples/actions/workflows/pylint.yml/badge.svg)](https://github.com/cicsdev/cics-security-sdv-samples/actions/workflows/pylint.yml)
-
+[![CI/CD Pipeline](https://github.com/cicsdev/cics-security-sdv-samples/actions/workflows/continuous-integration.yml/badge.svg)](https://github.com/cicsdev/cics-security-sdv-samples/actions/workflows/continuous-integration.yml)
 
 This sample repository provides example tooling that contributes towards achieving **[Security definition validation for CICS TS (SDV)](https://www.ibm.com/docs/en/cics-ts/6.x?topic=hiwztic-how-it-works-capturing-validating-security-definitions-during-development-process#hiw-devsecops__title__7)** in a CI/CD pipeline.
 

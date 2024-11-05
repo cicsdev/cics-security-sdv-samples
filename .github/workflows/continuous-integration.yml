@@ -136,7 +136,7 @@ jobs:
         uses: actions/deploy-pages@v4
   #
   Dependabot-merge:
-    needs: [bot-pyLint, Bot-ansible-lint, Bot-test, Docs-build]
+    needs: [Bot-pyLint, Bot-ansible-lint, Bot-test, Docs-build]
     runs-on: ubuntu-latest
     if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'cicsdev/cics-security-sdv-samples'
     steps:

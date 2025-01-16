@@ -1,0 +1,31 @@
+# Dependency Review Action
+#
+# This Action will scan dependency manifest files that change as part of a Pull Request,
+# surfacing known-vulnerable versions of the packages declared or updated in the PR.
+# Once installed, if the workflow run is marked as required, PRs introducing known-vulnerable
+# packages will be blocked from merging.
+#
+# Source repository: https://github.com/actions/dependency-review-action
+# Public documentation: https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/about-dependency-review#dependency-review-enforcement
+name: 'Dependency review'
+on:
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v4
+      - name: 'Dependency Review'
+        uses: actions/dependency-review-action@v4
+        with:
+          comment-summary-in-pr: always
+          fail-on-severity: low
+          deny-licenses: GPL-1.0-or-later, LGPL-2.0-or-later, AGPL-1.0-or-later, BSD-3-Clause-No-Nuclear-License, BSD-3-Clause-No-Nuclear-License-2014, BSD-3-Clause-No-Nuclear-Warranty, BSD-3-Clause-Open-MPI, BSD-4-Clause-Shortened, BSD-4-Clause-UC, BUSL-1.1, CPAL-1.0, CDLA-Permissive-1.0, CDLA-Permissive-2.0, CDLA-Sharing-1.0, CC-BY-ND-1.0, CC-BY-ND-2.0, CC-BY-ND-2.5, CC-BY-ND-3.0, CC-BY-ND-3.0-DE, CC-BY-ND-4.0, CC-BY-NC-1.0, CC-BY-NC-2.0, CC-BY-NC-2.5, CC-BY-NC-3.0, CC-BY-NC-3.0-DE, CC-BY-NC-4.0, CC-BY-NC-ND-1.0, CC-BY-NC-ND-2.0, CC-BY-NC-ND-2.5, CC-BY-NC-ND-3.0, CC-BY-NC-ND-3.0-DE, CC-BY-NC-4.0, CC-BY-NC-ND-1.0, CC-BY-NC-ND-2.0, CC-BY-NC-ND-2.5, CC-BY-NC-ND-3.0, CC-BY-NC-ND-3.0-DE, CC-BY-NC-ND-3.0-IGO, CC-BY-NC-ND-4.0, CC-BY-NC-SA-1.0, CC-BY-NC-SA-2.0, CC-BY-NC-SA-2.0-FR, CC-BY-NC-SA-2.0-UK, CC-BY-NC-SA-2.5, CC-BY-NC-SA-3.0, CC-BY-NC-SA-3.0-DE, CC-BY-NC-SA-3.0-IGO, CC-BY-NC-SA-4.0, CC-BY-SA-1.0, CC-BY-SA-2.0, CC-BY-SA-2.0-UK, CC-BY-SA-2.1-JP, CC-BY-SA-2.5, CC-BY-SA-3.0, CC-BY-SA-3.0-AT, CC-BY-SA-3.0-DE, CC-BY-SA-4.0, CC-PDDC, ECL-1.0, Elastic-2.0, EUPL-1.0, EUPL-1.1, EUPL-1.2, MS-LPL, MS-RL, MPL-2.0-no-copyleft-exception, NPL-1.0, NPL-1.1, ODC-By-1.0, ODbL-1.0, PDDL-1.0, SCEA, SSPL-1.0, Vim
+          fail-on-scopes: development, runtime, unknown

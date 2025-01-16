@@ -42,7 +42,8 @@
         "ms-python.python",
         "ms-python.pylint",
         "stylelint.vscode-stylelint",
-        "streetsidesoftware.code-spell-checker"
+        "streetsidesoftware.code-spell-checker",
+        "github.vscode-github-actions"
       ]
     }
   },

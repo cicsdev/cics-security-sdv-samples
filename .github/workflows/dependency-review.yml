@@ -8,9 +8,7 @@
 # Source repository: https://github.com/actions/dependency-review-action
 # Public documentation: https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/about-dependency-review#dependency-review-enforcement
 name: 'Dependency review'
-on:
-  pull_request:
-    branches: [ "main", "oldRelease" ]
+on: [pull_request]
 
 permissions:
   contents: read
@@ -27,5 +25,6 @@ jobs:
         with:
           comment-summary-in-pr: always
           fail-on-severity: low
-          deny-licenses: GPL-1.0-or-later, LGPL-2.0-or-later, AGPL-1.0-or-later, BSD-3-Clause-No-Nuclear-License, BSD-3-Clause-No-Nuclear-License-2014, BSD-3-Clause-No-Nuclear-Warranty, BSD-3-Clause-Open-MPI, BSD-4-Clause-Shortened, BSD-4-Clause-UC, BUSL-1.1, CPAL-1.0, CDLA-Permissive-1.0, CDLA-Permissive-2.0, CDLA-Sharing-1.0, CC-BY-ND-1.0, CC-BY-ND-2.0, CC-BY-ND-2.5, CC-BY-ND-3.0, CC-BY-ND-3.0-DE, CC-BY-ND-4.0, CC-BY-NC-1.0, CC-BY-NC-2.0, CC-BY-NC-2.5, CC-BY-NC-3.0, CC-BY-NC-3.0-DE, CC-BY-NC-4.0, CC-BY-NC-ND-1.0, CC-BY-NC-ND-2.0, CC-BY-NC-ND-2.5, CC-BY-NC-ND-3.0, CC-BY-NC-ND-3.0-DE, CC-BY-NC-4.0, CC-BY-NC-ND-1.0, CC-BY-NC-ND-2.0, CC-BY-NC-ND-2.5, CC-BY-NC-ND-3.0, CC-BY-NC-ND-3.0-DE, CC-BY-NC-ND-3.0-IGO, CC-BY-NC-ND-4.0, CC-BY-NC-SA-1.0, CC-BY-NC-SA-2.0, CC-BY-NC-SA-2.0-FR, CC-BY-NC-SA-2.0-UK, CC-BY-NC-SA-2.5, CC-BY-NC-SA-3.0, CC-BY-NC-SA-3.0-DE, CC-BY-NC-SA-3.0-IGO, CC-BY-NC-SA-4.0, CC-BY-SA-1.0, CC-BY-SA-2.0, CC-BY-SA-2.0-UK, CC-BY-SA-2.1-JP, CC-BY-SA-2.5, CC-BY-SA-3.0, CC-BY-SA-3.0-AT, CC-BY-SA-3.0-DE, CC-BY-SA-4.0, CC-PDDC, ECL-1.0, Elastic-2.0, EUPL-1.0, EUPL-1.1, EUPL-1.2, MS-LPL, MS-RL, MPL-2.0-no-copyleft-exception, NPL-1.0, NPL-1.1, ODC-By-1.0, ODbL-1.0, PDDL-1.0, SCEA, SSPL-1.0, Vim
+          allow-licenses: AFL-1.2, AFL-2.0, AFL-2.1, Adobe-2006, ANTLR-PD, Apache-2.0, Apache-1.0, Apache-1.1, Artistic-1.0, Artistic-1.0-Perl, Artistic-1.0-cl8, Artistic-2.0, Beerware, BlueOak-1.0.0, BSL-1.0, BSD-1-Clause, BSD-2-Clause-FreeBSD, BSD-2-Clause-NetBSD, BSD-2-Clause, BSD-2-Clause-Views, BSD-3-Clause, BSD-3-Clause-Clear, BSD-4-Clause, BSD-Protection, BSD-Source-Code, BSD-3-Clause-Attribution, 0BSD, BSD-2-Clause-Patent, bzip2-1.0.6, ClArtistic, CDDL-1.0, CDDL-1.1, CPL-1.0, CC0-1.0, curl, WTFPL, EPL-1.0, EPL-2.0, ECL-2.0, eGenix, ErlPL-1.1, FTL, FSFAP, HPND, ICU, IJG, Info-ZIP, ISC, Libpng, MS-PL, MIT, MIT-Modern-Variant, MIT-0, MPL-1.0, MPL-1.1, MPL-2.0, NAIST-2003, Net-SNMP, OLDAP-1.4, OLDAP-2.8, OpenSSL, PHP-3.0, PHP-3.01, Plexus, PostgreSQL, Python-2.0, Python-2.0.1, PSF-2.0, RSA-MD, Ruby, SISSL, SISSL-1.2, TCL, Unicode-DFS-2015, Unicode-DFS-2016, Unicode-TOU, UPL-1.0, Unlicense, W3C-20150513, W3C-19980720, W3C, Xnet, X11, X11-distribute-modifications-variant, Zend-2.0, Zlib, zlib-acknowledgement, ZPL-1.1, ZPL-2.0, ZPL-2.1
           fail-on-scopes: development, runtime, unknown
+          retry-on-snapshot-warnings: true

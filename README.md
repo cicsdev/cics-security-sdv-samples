@@ -7,6 +7,8 @@ This sample repository provides example tooling that contributes towards achievi
 SDV is an example implementation of a CI/CD pipeline that introduces CICS application security testing into its flow.
 SDV automates and improves the efficiency of identifying required changes to security when change requests are made for a CICS application.
 
+See [Release blog](https://community.ibm.com/community/user/blogs/mark-lawrence/2024/04/25/security-definition-validation-pipeline)
+
 ## Contents
 
 Each of the tools contained within this repositiory live within their own folder. These tools include (along with folder locations):

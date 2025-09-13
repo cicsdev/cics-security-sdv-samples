@@ -2,7 +2,7 @@
 
 [![CI/CD Pipeline](https://github.com/cicsdev/cics-security-sdv-samples/actions/workflows/continuous-integration.yml/badge.svg)](https://github.com/cicsdev/cics-security-sdv-samples/actions/workflows/continuous-integration.yml)
 
-This sample repository provides example tooling that contributes towards achieving **[Security definition validation for CICS TS (SDV)](https://www.ibm.com/docs/en/cics-ts/6.x?topic=hiwztic-how-it-works-capturing-validating-security-definitions-during-development-process#hiw-devsecops__title__7)** in a CI/CD pipeline.
+This sample repository provides example tooling that contributes towards achieving **[Security definition validation for CICS TS (SDV)](https://www.ibm.com/docs/en/cics-ts/6.x?topic=hiwztsic-how-it-works-capturing-validating-security-definitions-during-development-process#hiw-devsecops__title__7)** in a CI/CD pipeline.
 
 SDV is an example implementation of a CI/CD pipeline that introduces CICS application security testing into its flow.
 SDV automates and improves the efficiency of identifying required changes to security when change requests are made for a CICS application.
